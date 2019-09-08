@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {compareCourses, Course} from '../model/course';
-import {Observable} from "rxjs";
-import {defaultDialogConfig} from '../shared/default-dialog-config';
-import {EditCourseDialogComponent} from '../edit-course-dialog/edit-course-dialog.component';
-import {MatDialog} from '@angular/material';
-import {map, shareReplay} from 'rxjs/operators';
-import {CoursesHttpService} from '../services/courses-http.service';
+import { Component, OnInit } from '@angular/core';
+import { compareCourses, Course } from '../model/course';
+import { Observable } from 'rxjs';
+import { defaultDialogConfig } from '../shared/default-dialog-config';
+import { EditCourseDialogComponent } from '../edit-course-dialog/edit-course-dialog.component';
+import { MatDialog  } from '@angular/material';
+import { map, shareReplay } from 'rxjs/operators';
+import { CoursesHttpService } from '../services/courses-http.service';
 
 
 
@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
     constructor(
       private dialog: MatDialog,
       private coursesHttpService: CoursesHttpService) {
-
     }
 
     ngOnInit() {
@@ -47,13 +46,13 @@ export class HomeComponent implements OnInit {
 
     this.beginnerCourses$ = courses$
       .pipe(
-        map(courses => courses.filter(course => course.category == 'BEGINNER'))
+        map(courses => courses.filter(course => course.category === 'BEGINNER'))
       );
 
 
     this.advancedCourses$ = courses$
       .pipe(
-        map(courses => courses.filter(course => course.category == 'ADVANCED'))
+        map(courses => courses.filter(course => course.category === 'ADVANCED'))
       );
 
     this.promoTotal$ = courses$
@@ -68,7 +67,7 @@ export class HomeComponent implements OnInit {
     const dialogConfig = defaultDialogConfig();
 
     dialogConfig.data = {
-      dialogTitle:"Create Course",
+      dialogTitle: 'Create Course',
       mode: 'create'
     };
 
