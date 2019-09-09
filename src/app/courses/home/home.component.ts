@@ -30,11 +30,11 @@ export class HomeComponent implements OnInit {
       private coursesHttpService: CoursesHttpService) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
       this.reload();
     }
 
-  reload() {
+  reload(): void {
 
     const courses$ = this.coursesHttpService.findAllCourses()
       .pipe(
@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  onAddCourse() {
+  onAddCourse(): void {
 
     const dialogConfig = defaultDialogConfig();
 

@@ -1,8 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {select, Store} from "@ngrx/store";
-import {Observable} from "rxjs";
-import {map} from 'rxjs/operators';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router
+} from '@angular/router';
+import { AppState } from './reducers/reducers';
+import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
+import { logout, login } from './auth/auth.actions';
+import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,13 +21,23 @@ import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Route
 })
 export class AppComponent implements OnInit {
 
-    loading = true;
+    public loading: boolean = true;
+    public isLoggedIn$: Observable<boolean>;
+    public isLoggedOut$: Observable<boolean>;
 
-    constructor(private router: Router) {
+    constructor(
+      private router: Router,
+      private store: Store<AppState>,
+    ) {
 
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
+      const userProfile = JSON.parse(localStorage.getItem('user'));
+
+      if (userProfile !== undefined) {
+        this.store.dispatch(login({ user: userProfile }));
+      }
 
       this.router.events.subscribe(event  => {
         switch (true) {
@@ -38,10 +58,17 @@ export class AppComponent implements OnInit {
         }
       });
 
+      this.isLoggedIn$ = this.store.pipe(
+        select(isLoggedIn)
+      );
+
+      this.isLoggedOut$ = this.store.pipe(
+        select(isLoggedOut)
+      );
     }
 
-    logout() {
-
+    logout(): void {
+      this.store.dispatch(logout());
     }
 
 }
