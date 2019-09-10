@@ -24,13 +24,14 @@ export class CourseComponent implements OnInit {
 
   constructor(
     private coursesService: CoursesHttpService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+  ) {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
 
-    const courseUrl = this.route.snapshot.paramMap.get("courseUrl");
+    const courseUrl = this.route.snapshot.paramMap.get('courseUrl');
 
     this.course$ = this.coursesService.findCourseByUrl(courseUrl);
 
@@ -42,7 +43,7 @@ export class CourseComponent implements OnInit {
   }
 
 
-  loadLessonsPage(course: Course) {
+  loadLessonsPage(course: Course): void {
 
   }
 
