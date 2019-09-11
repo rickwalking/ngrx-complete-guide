@@ -1,16 +1,18 @@
-import { Course } from '../../model/course';
+import { Course, compareCourses } from '../../model/course';
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on } from '@ngrx/store';
 import { CourseActions } from '../../action-types';
 
-export interface CourseState extends EntityState<Course> {
+export interface CoursesState extends EntityState<Course> {
 }
 
-export const adapter = createEntityAdapter<Course>();
+export const adapter = createEntityAdapter<Course>({
+  sortComparer: compareCourses,
+});
 
 export const initialCourseState = adapter.getInitialState();
 
-export const coursesReducer = createReducer(
+export const courseReducer = createReducer(
   initialCourseState,
 
   on(CourseActions.allCoursesLoaded,
@@ -18,3 +20,6 @@ export const coursesReducer = createReducer(
   ),
 );
 
+export const {
+  selectAll,
+} = adapter.getSelectors();

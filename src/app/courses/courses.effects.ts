@@ -8,7 +8,7 @@ import { allCoursesLoaded } from './course.actions';
 @Injectable()
 export class CoursesEffects {
   loadCourses$ = createEffect(() =>
-    this.actions$.pipe(
+    () => this.actions$.pipe(
       ofType(CourseActions.loadAllCourses),
       concatMap(action => this.coursesHttpService.findAllCourses()),
       map(courses => allCoursesLoaded({ courses }))

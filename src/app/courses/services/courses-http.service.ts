@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -10,9 +8,8 @@ import { Lesson } from '../model/lesson';
 
 @Injectable()
 export class CoursesHttpService {
-
     constructor(private http: HttpClient) {
-
+      //
     }
 
     findAllCourses(): Observable<Course[]> {
@@ -39,10 +36,7 @@ export class CoursesHttpService {
         });
     }
 
-
-    saveCourse(courseId: number | string, changes: Partial<Course>) {
-        return this.http.put('/api/course/' + courseId, changes);
+    saveCourse(courseId: number | string, changes: Partial<Course>): Observable<Course> {
+        return this.http.put<Course>('/api/course/' + courseId, changes);
     }
-
-
 }
