@@ -19,8 +19,6 @@ export class HomeComponent implements OnInit {
 
     promoTotal$: Observable<number>;
 
-    loading$: Observable<boolean>;
-
     beginnerCourses$: Observable<Course[]>;
 
     advancedCourses$: Observable<Course[]>;
@@ -37,16 +35,12 @@ export class HomeComponent implements OnInit {
     }
 
   reload(): void {
-
     this.beginnerCourses$ = this.store.pipe(select(selectBeginnerCourses));
-
     this.advancedCourses$ = this.store.pipe(select(selectAdvancedCourses));
-
     this.promoTotal$ = this.store.pipe(select(selectPromoTotal));
   }
 
   onAddCourse(): void {
-
     const dialogConfig = defaultDialogConfig();
 
     dialogConfig.data = {
@@ -55,8 +49,5 @@ export class HomeComponent implements OnInit {
     };
 
     this.dialog.open(EditCourseDialogComponent, dialogConfig);
-
   }
-
-
 }
