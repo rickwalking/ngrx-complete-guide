@@ -1,5 +1,3 @@
-
-
 export interface Lesson {
     id: number;
     description: string;
@@ -8,19 +6,19 @@ export interface Lesson {
     courseId: number;
 }
 
-
-export function compareLessons(l1:Lesson, l2: Lesson) {
-
-  const compareCourses = l1.courseId - l2.courseId;
+export function compareLessons(
+  firstLesson: Lesson,
+  secondLesson: Lesson
+) {
+  const compareCourses = firstLesson.courseId - secondLesson.courseId;
 
   if (compareCourses > 0) {
     return 1;
   }
-  else if (compareCourses < 0){
+
+  if (compareCourses < 0) {
     return -1;
   }
-  else {
-    return l1.seqNo - l2.seqNo;
-  }
 
+  return firstLesson.seqNo - secondLesson.seqNo;
 }

@@ -1,11 +1,18 @@
-import {Component, OnInit} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {distinctUntilChanged, map} from 'rxjs/operators';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
-import {AppState} from './reducers';
-import {isLoggedIn, isLoggedOut} from './auth/auth.selectors';
-import {login, logout} from './auth/auth.actions';
+import { Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router
+} from '@angular/router';
+
+import { AppState } from './reducers';
+
+import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
+import { login, logout } from './auth/auth.actions';
 
 @Component({
     selector: 'app-root',
@@ -13,61 +20,56 @@ import {login, logout} from './auth/auth.actions';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+    public loading: boolean = true;
 
-    loading = true;
+    public isLoggedIn$: Observable<boolean>;
+    public isLoggedOut$: Observable<boolean>;
 
-    isLoggedIn$: Observable<boolean>;
-
-    isLoggedOut$: Observable<boolean>;
-
-    constructor(private router: Router,
-                private store: Store<AppState>) {
-
+    constructor(
+      private router: Router,
+      private store: Store<AppState>
+    ) {
+      //
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
+      const userProfile = localStorage.getItem('user');
 
-        const userProfile = localStorage.getItem("user");
+      if (userProfile !== undefined) {
+          this.store.dispatch(login({user: JSON.parse(userProfile)}));
+      }
 
-        if (userProfile) {
-            this.store.dispatch(login({user: JSON.parse(userProfile)}));
+      this.router.events.subscribe(event => {
+        switch (true) {
+          case event instanceof NavigationStart: {
+            this.loading = true;
+            break;
+          }
+
+          case event instanceof NavigationEnd:
+          case event instanceof NavigationCancel:
+          case event instanceof NavigationError: {
+            this.loading = false;
+            break;
+          }
+          default: {
+            break;
+          }
         }
+      });
 
-        this.router.events.subscribe(event => {
-            switch (true) {
-                case event instanceof NavigationStart: {
-                    this.loading = true;
-                    break;
-                }
+    this.isLoggedIn$ = this.store
+      .pipe(
+          select(isLoggedIn)
+      );
 
-                case event instanceof NavigationEnd:
-                case event instanceof NavigationCancel:
-                case event instanceof NavigationError: {
-                    this.loading = false;
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        });
+    this.isLoggedOut$ = this.store
+      .pipe(
+          select(isLoggedOut)
+      );
+  }
 
-        this.isLoggedIn$ = this.store
-            .pipe(
-                select(isLoggedIn)
-            );
-
-        this.isLoggedOut$ = this.store
-            .pipe(
-                select(isLoggedOut)
-            );
-
-    }
-
-    logout() {
-
-        this.store.dispatch(logout());
-
-    }
-
+  logout(): void {
+      this.store.dispatch(logout());
+  }
 }
